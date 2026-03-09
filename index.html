@@ -1,1 +1,1341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Which UX Role Is Right for You?</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,400;9..40,500;9..40,600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
+:root {
+  --bg:          #ffffff;
+  --bg-warm:     #f9f9f9;
+  --text-ink:    #111111;
+  --text-bark:   #333333;
+  --text-stone:  #777777;
+  --text-dust:   #aaaaaa;
+  --border:      #e0e0e0;
+  --border-deep: #bbbbbb;
+  --divider:     #e8e8e8;
+  --red:         #8B1A1A;
+  --red-90:      rgba(139,26,26,0.90);
+  --red-60:      rgba(139,26,26,0.60);
+  --red-12:      rgba(139,26,26,0.12);
+  --red-06:      rgba(139,26,26,0.06);
+  --tag-bg:      rgba(139,26,26,0.08);
+  --tag-secondary: #f0f0f0;
+}
+
+html { font-size: 16px; }
+
+body {
+  background: var(--bg);
+  color: var(--text-ink);
+  font-family: 'DM Sans', sans-serif;
+  font-weight: 300;
+  line-height: 1.65;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+/* ═══════════════════════════════
+   HEADER + HAMBURGER
+═══════════════════════════════ */
+.site-header {
+  width: 100%;
+  padding: 0 28px;
+  height: 48px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-bottom: 1px solid var(--border);
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 300;
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.header-wordmark {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--text-ink);
+}
+
+.header-sep {
+  color: var(--text-dust);
+  font-size: 12px;
+}
+
+.header-page {
+  font-size: 11px;
+  font-weight: 300;
+  letter-spacing: 0.04em;
+  color: var(--text-stone);
+}
+
+/* hamburger button */
+.hamburger {
+  width: 36px;
+  height: 36px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-radius: 3px;
+  transition: background 0.15s ease;
+  flex-shrink: 0;
+}
+.hamburger:hover { background: var(--bg-warm); }
+.hamburger span {
+  display: block;
+  width: 18px;
+  height: 1.5px;
+  background: var(--text-ink);
+  transition: transform 0.25s ease, opacity 0.2s ease;
+  transform-origin: center;
+}
+.hamburger.open span:nth-child(1) { transform: translateY(6.5px) rotate(45deg); }
+.hamburger.open span:nth-child(2) { opacity: 0; }
+.hamburger.open span:nth-child(3) { transform: translateY(-6.5px) rotate(-45deg); }
+
+/* ── DRAWER ── */
+.nav-drawer {
+  position: fixed;
+  top: 48px;
+  right: 0;
+  width: 220px;
+  background: var(--bg);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  z-index: 250;
+  padding: 8px 0 16px;
+  transform: translateX(100%);
+  transition: transform 0.25s cubic-bezier(0.4,0,0.2,1);
+  box-shadow: -4px 4px 24px rgba(0,0,0,0.06);
+}
+.nav-drawer.open { transform: translateX(0); }
+
+.drawer-label {
+  font-size: 10px;
+  font-weight: 500;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--text-dust);
+  padding: 12px 20px 6px;
+}
+
+.nav-drawer-item {
+  display: block;
+  width: 100%;
+  padding: 9px 20px;
+  font-size: 13px;
+  font-weight: 400;
+  color: var(--text-bark);
+  background: transparent;
+  border: none;
+  text-align: left;
+  cursor: pointer;
+  transition: background 0.12s ease, color 0.12s ease;
+  letter-spacing: 0.01em;
+}
+.nav-drawer-item:hover { background: var(--bg-warm); color: var(--text-ink); }
+.nav-drawer-item.active { color: var(--red); font-weight: 500; background: var(--red-06); }
+
+/* overlay to close drawer */
+.drawer-overlay {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 240;
+}
+.drawer-overlay.open { display: block; }
+
+/* ═══════════════════════════════
+   MAIN WRAP
+═══════════════════════════════ */
+.main-wrap {
+  width: 100%;
+  max-width: 680px;
+  padding: 0 80px 120px;
+}
+
+@media (max-width: 640px) {
+  .main-wrap { padding: 0 24px 80px; }
+  .site-header { padding: 0 16px; }
+}
+
+/* ═══════════════════════════════
+   PAGES
+═══════════════════════════════ */
+.page {
+  display: none;
+  opacity: 0;
+  transform: translateY(8px);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+.page.active   { display: block; opacity: 1; transform: translateY(0); }
+.page.fade-out { opacity: 0; transform: translateY(-6px); pointer-events: none; }
+
+/* ═══════════════════════════════
+   QUIZ SCREENS
+═══════════════════════════════ */
+.screen {
+  display: none;
+  opacity: 0;
+  transform: translateY(10px);
+  transition: opacity 0.35s ease, transform 0.35s ease;
+}
+.screen.active   { display: block; opacity: 1; transform: translateY(0); }
+.screen.fade-out { opacity: 0; transform: translateY(-8px); pointer-events: none; }
+
+/* ═══════════════════════════════
+   SHARED COMPONENTS
+═══════════════════════════════ */
+.page-rule {
+  width: 32px; height: 2px;
+  background: var(--red);
+  margin-top: 52px; margin-bottom: 28px;
+}
+.eyebrow {
+  font-size: 10px; font-weight: 500;
+  letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red-60); margin-bottom: 16px;
+}
+.section-rule { width: 100%; height: 1px; background: var(--divider); margin: 24px 0; }
+
+/* ─ INTRO TITLE ─ */
+.intro-title {
+  font-size: clamp(34px, 5.5vw, 50px);
+  font-weight: 600; line-height: 1.12;
+  letter-spacing: -0.02em; color: var(--text-ink); margin-bottom: 24px;
+}
+.intro-body {
+  font-size: 15px; font-weight: 300;
+  color: var(--text-bark); line-height: 1.8; margin-bottom: 32px; max-width: 500px;
+}
+
+/* ─ CALLOUT ─ */
+.callout {
+  display: flex; align-items: flex-start; gap: 14px;
+  background: var(--red-06); border-left: 2px solid var(--red-60);
+  padding: 14px 18px; margin-bottom: 32px;
+}
+.callout-mark { font-size: 14px; font-weight: 500; color: var(--red-60); flex-shrink: 0; line-height: 1.55; }
+.callout-text { font-size: 14px; font-weight: 300; color: var(--text-bark); line-height: 1.7; }
+
+/* ─ PROPERTIES TABLE ─ */
+.props-table { width: 100%; border-collapse: collapse; margin-bottom: 36px; }
+.props-table tr { border-bottom: 1px solid var(--divider); }
+.props-table tr:last-child { border-bottom: none; }
+.prop-key {
+  padding: 9px 16px 9px 0; font-size: 11px; font-weight: 500;
+  letter-spacing: 0.12em; text-transform: uppercase; color: var(--text-stone);
+  white-space: nowrap; width: 180px; vertical-align: top;
+}
+.prop-val {
+  padding: 9px 0; font-size: 13px; font-weight: 300;
+  color: var(--text-bark); vertical-align: top; line-height: 1.6;
+}
+
+/* ─ TAGS ─ */
+.n-tag {
+  display: inline-flex; align-items: center; padding: 3px 9px;
+  font-size: 11px; font-weight: 400; letter-spacing: 0.04em;
+  background: var(--tag-bg); color: var(--red); border-radius: 4px; white-space: nowrap;
+}
+.n-tag.forest { background: var(--red); color: #ffffff; }
+.n-tag.green  { background: var(--red-12); color: var(--red); }
+.n-tag.muted  { background: var(--tag-secondary); color: var(--text-stone); }
+.n-tag.role   { background: rgba(30,30,30,0.50); color: #ffffff; }
+.tags-wrap    { display: flex; flex-wrap: wrap; gap: 5px; }
+
+/* ─ BUTTONS ─ */
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--red); color: #ffffff;
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+  letter-spacing: 0.12em; text-transform: uppercase;
+  padding: 11px 24px; border: none; border-radius: 4px;
+  cursor: pointer; transition: background 0.2s ease;
+}
+.btn-primary:hover { background: var(--red-90); }
+
+.btn-text {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: transparent; color: var(--text-stone);
+  font-family: 'DM Sans', sans-serif; font-size: 12px; font-weight: 400;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  padding: 8px 10px; border: none; border-radius: 4px;
+  cursor: pointer; transition: background 0.15s ease, color 0.15s ease;
+}
+.btn-text:hover { background: var(--bg-warm); color: var(--text-bark); }
+
+/* ─ PROGRESS ─ */
+.progress-wrap { margin-bottom: 40px; padding-top: 32px; }
+.progress-meta { display: flex; justify-content: space-between; align-items: baseline; margin-bottom: 8px; }
+.progress-label { font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dust); }
+.progress-count { font-size: 13px; font-weight: 400; color: var(--text-stone); }
+.progress-track { width: 100%; height: 1px; background: var(--border); overflow: hidden; }
+.progress-fill  { height: 100%; background: var(--red); transition: width 0.5s cubic-bezier(0.4,0,0.2,1); }
+
+/* ─ QUESTION ─ */
+.q-number { font-size: 10px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red-60); margin-bottom: 12px; }
+.q-text   { font-size: clamp(20px,3.2vw,27px); font-weight: 500; line-height: 1.3; letter-spacing: -0.02em; color: var(--text-ink); margin-bottom: 28px; }
+
+/* ─ ANSWERS ─ */
+.answers-grid { display: flex; flex-direction: column; gap: 3px; margin-bottom: 36px; }
+.answer-card {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 12px; background: transparent; border: 1px solid transparent;
+  border-radius: 1px; cursor: pointer; text-align: left; width: 100%;
+  transition: background 0.15s ease, border-color 0.15s ease;
+}
+.answer-card:hover    { background: var(--bg-warm); border-color: var(--border); }
+.answer-card.selected { background: var(--red-06); border-color: var(--red); }
+.a-radio {
+  width: 15px; height: 15px; border-radius: 50%; border: 1px solid var(--border-deep);
+  background: transparent; flex-shrink: 0; margin-top: 3px;
+  display: flex; align-items: center; justify-content: center;
+  transition: border-color 0.15s ease, background 0.15s ease;
+}
+.answer-card.selected .a-radio { border-color: var(--red); background: var(--red); }
+.a-radio-dot { width: 5px; height: 5px; border-radius: 50%; background: #fff; opacity: 0; transition: opacity 0.15s ease; }
+.answer-card.selected .a-radio-dot { opacity: 1; }
+.a-text { font-size: 14px; font-weight: 300; color: var(--text-bark); line-height: 1.6; }
+.answer-card.selected .a-text { color: var(--red); }
+
+.quiz-nav {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 16px; border-top: 1px solid var(--divider);
+}
+
+/* ─ ANALYZING ─ */
+#screen-analyzing { padding: 100px 0; text-align: center; }
+.ana-cursor { display: block; margin: 0 auto 28px; width: 28px; height: 32px; animation: blink 1s step-start infinite; }
+@keyframes blink { 0%,100% { opacity:1; } 50% { opacity:0; } }
+.ana-title { font-size: 20px; font-weight: 500; letter-spacing: -0.01em; color: var(--text-ink); margin-bottom: 8px; }
+.ana-sub   { font-size: 11px; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-dust); }
+.ana-bar   { width: 160px; height: 1px; background: var(--border); margin: 28px auto 0; overflow: hidden; }
+.ana-bar-fill { height: 100%; background: var(--red); animation: loadBar 2.4s cubic-bezier(0.4,0,0.6,1) forwards; }
+@keyframes loadBar { 0%{width:0%} 55%{width:60%} 100%{width:100%} }
+
+/* ─ RESULTS ─ */
+.result-title {
+  font-size: clamp(36px,6vw,54px); font-weight: 300;
+  line-height: 1.1; letter-spacing: -0.03em; color: var(--text-ink); margin-bottom: 14px;
+}
+.result-title em { font-style: normal; font-weight: 300; color: var(--text-ink); }
+.result-sub { font-size: 16px; font-weight: 300; color: var(--text-bark); line-height: 1.7; margin-bottom: 28px; max-width: 460px; }
+.result-h2 {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--text-stone); margin-top: 36px; margin-bottom: 14px;
+  padding-bottom: 8px; border-bottom: 1px solid var(--divider);
+}
+.bullet-list { display: flex; flex-direction: column; gap: 2px; }
+.bullet-item { display: flex; align-items: flex-start; gap: 10px; padding: 5px 8px; border-radius: 1px; transition: background 0.12s ease; }
+.bullet-item:hover { background: var(--bg-warm); }
+.bullet-mark { font-size: 14px; color: var(--red-60); flex-shrink: 0; line-height: 1.65; }
+.bullet-text { font-size: 14px; font-weight: 300; color: var(--text-bark); line-height: 1.65; }
+.result-body-text { font-size: 15px; font-weight: 300; color: var(--text-bark); line-height: 1.85; max-width: 540px; }
+.result-actions {
+  margin-top: 40px; padding-top: 24px; border-top: 1px solid var(--divider);
+  display: flex; gap: 10px; flex-wrap: wrap;
+}
+
+/* ─ GAME PLAN ─ */
+.gameplan-block {
+  margin-top: 48px;
+  padding: 28px 24px;
+  background: var(--bg-warm);
+  border-top: 2px solid var(--red);
+}
+
+.gameplan-block-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.2em; text-transform: uppercase;
+  color: var(--red-60); margin-bottom: 6px;
+}
+
+.gameplan-block-title {
+  font-size: 18px; font-weight: 500; letter-spacing: -0.01em;
+  color: var(--text-ink); margin-bottom: 20px;
+}
+
+.gameplan-sections { display: flex; flex-direction: column; gap: 24px; }
+
+.gameplan-section-label {
+  font-size: 10px; font-weight: 500; letter-spacing: 0.14em; text-transform: uppercase;
+  color: var(--text-stone); margin-bottom: 8px;
+}
+
+.gameplan-items { display: flex; flex-direction: column; gap: 4px; }
+
+.gameplan-item {
+  display: flex; align-items: flex-start; gap: 9px;
+  padding: 4px 0;
+}
+
+.gameplan-mark {
+  font-size: 13px; color: var(--red-60); flex-shrink: 0; line-height: 1.65;
+}
+
+.gameplan-text {
+  font-size: 14px; font-weight: 300; color: var(--text-bark); line-height: 1.65;
+}
+
+.gameplan-link {
+  display: inline-flex; align-items: baseline; gap: 4px;
+  font-size: 13px; font-weight: 400;
+  color: var(--red); text-decoration: none;
+  border-bottom: 1px solid var(--red-12);
+  transition: border-color 0.15s ease, color 0.15s ease;
+}
+.gameplan-link:hover { color: var(--red-90); border-color: var(--red-60); }
+.gameplan-link-desc {
+  font-size: 12px; font-weight: 300; color: var(--text-stone);
+}
+
+.gameplan-links { display: flex; flex-direction: column; gap: 8px; }
+
+/* ─ AI BLOCK ─ */
+.ai-block {
+  margin-top: 24px;
+  padding: 28px 24px;
+  background: var(--red-06);
+  border-top: 2px solid var(--red);
+}
+
+.ai-block .gameplan-block-label { color: var(--red-60); }
+.ai-block .gameplan-mark { color: var(--red-60); }
+
+/* ═══════════════════════════════
+   ARCHETYPES INDEX PAGE
+═══════════════════════════════ */
+.arc-index-title {
+  font-size: clamp(28px,4.5vw,40px); font-weight: 600;
+  letter-spacing: -0.02em; color: var(--text-ink); margin-bottom: 16px; line-height: 1.15;
+}
+.arc-index-intro {
+  font-size: 15px; font-weight: 300; color: var(--text-bark);
+  line-height: 1.8; max-width: 500px; margin-bottom: 40px;
+}
+
+.arc-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1px;
+  background: var(--border);
+  border: 1px solid var(--border);
+}
+
+@media (max-width: 500px) {
+  .arc-grid { grid-template-columns: 1fr; }
+}
+
+.arc-card {
+  background: var(--bg);
+  padding: 28px 24px;
+  cursor: pointer;
+  border: none;
+  text-align: left;
+  transition: background 0.15s ease;
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.arc-card:hover { background: var(--bg-warm); }
+
+.arc-card-name {
+  font-size: 16px; font-weight: 500; letter-spacing: -0.01em;
+  color: var(--text-ink); margin-bottom: 6px; line-height: 1.3;
+}
+.arc-card-tagline {
+  font-size: 13px; font-weight: 300; color: var(--text-stone); line-height: 1.5;
+  flex: 1;
+}
+.arc-card-arrow {
+  display: block; margin-top: 20px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--red-60);
+}
+
+/* ═══════════════════════════════
+   ARCHETYPE DETAIL PAGE
+═══════════════════════════════ */
+.arc-back-btn {
+  display: inline-flex; align-items: center; gap: 6px;
+  font-size: 11px; font-weight: 500; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--text-stone);
+  background: transparent; border: none; cursor: pointer;
+  padding: 0; margin-top: 32px; margin-bottom: 0;
+  transition: color 0.15s ease;
+}
+.arc-back-btn:hover { color: var(--text-ink); }
+</style>
+</head>
+<body>
+
+<!-- ═══════════ HEADER ═══════════ -->
+<header class="site-header">
+  <div class="header-left">
+    <span class="header-wordmark">UX Career</span>
+    <span class="header-sep">/</span>
+    <span class="header-page" id="header-page">Assessment</span>
+  </div>
+  <button class="hamburger" id="hamburger-btn" onclick="toggleDrawer()" aria-label="Menu">
+    <span></span><span></span><span></span>
+  </button>
+</header>
+
+<!-- ═══════════ NAV DRAWER ═══════════ -->
+<div class="drawer-overlay" id="drawer-overlay" onclick="closeDrawer()"></div>
+<nav class="nav-drawer" id="nav-drawer">
+  <div class="drawer-label">Navigation</div>
+  <button class="nav-drawer-item active" id="nav-quiz" onclick="navigateTo('quiz')">Take the Assessment</button>
+  <button class="nav-drawer-item" id="nav-archetypes" onclick="navigateTo('archetypes')">The Archetypes</button>
+</nav>
+
+<!-- ═══════════ CONTENT ═══════════ -->
+<main class="main-wrap">
+
+  <!-- ════ PAGE: QUIZ ════ -->
+  <div id="page-quiz" class="page active">
+
+    <div id="screen-intro" class="screen active">
+      <div class="page-rule"></div>
+      <div class="eyebrow">Career Assessment</div>
+      <h1 class="intro-title">Which UX Role<br>Is Right for You?</h1>
+      <p class="intro-body">This assessment maps your design instincts, decision-making style, and working approach to the UX career path where you are most likely to do your best work.</p>
+      <div class="callout">
+        <span class="callout-mark">—</span>
+        <span class="callout-text">There are no right answers. Choose the option that reflects how you actually work, not how you think you should work.</span>
+      </div>
+      <table class="props-table">
+        <tr><td class="prop-key">Questions</td><td class="prop-val">10</td></tr>
+        <tr><td class="prop-key">Duration</td><td class="prop-val">About 5 minutes</td></tr>
+        <tr><td class="prop-key">Archetypes</td><td class="prop-val">6 UX career paths</td></tr>
+        <tr><td class="prop-key">Intended for</td><td class="prop-val">Early-career designers, students, and those exploring specialization</td></tr>
+      </table>
+      <button class="btn-primary" onclick="startQuiz()">Begin assessment</button>
+    </div>
+
+    <div id="screen-quiz" class="screen">
+      <div class="progress-wrap">
+        <div class="progress-meta">
+          <span class="progress-label">Progress</span>
+          <span class="progress-count" id="progress-count">1 / 10</span>
+        </div>
+        <div class="progress-track"><div class="progress-fill" id="progress-fill" style="width:10%"></div></div>
+      </div>
+      <div id="q-number" class="q-number">Question 01</div>
+      <div id="q-text" class="q-text"></div>
+      <div class="answers-grid" id="answers-grid"></div>
+      <div class="quiz-nav">
+        <button class="btn-text" id="btn-back" onclick="prevQuestion()" style="opacity:0;pointer-events:none;">← Back</button>
+        <button class="btn-primary" id="btn-next" onclick="nextQuestion()" style="opacity:0;pointer-events:none;">Continue</button>
+      </div>
+    </div>
+
+    <div id="screen-analyzing" class="screen">
+      <svg class="ana-cursor" viewBox="0 0 28 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <path d="M4 2L4 26L10.5 20L15 29L17.5 27.5L13 18.5L21 18.5L4 2Z" fill="#111111" stroke="#111111" stroke-width="1" stroke-linejoin="round"/>
+      </svg>
+      <div class="ana-title">Analyzing your instincts...</div>
+      <div class="ana-sub">Mapping your approach to a design archetype</div>
+      <div class="ana-bar"><div class="ana-bar-fill"></div></div>
+    </div>
+
+    <div id="screen-results" class="screen">
+      <div class="page-rule"></div>
+      <div class="eyebrow">Your Archetype</div>
+      <h2 class="result-title" id="result-title"></h2>
+      <p class="result-sub" id="result-sub"></p>
+      <div class="section-rule"></div>
+      <table class="props-table">
+        <tr>
+          <td class="prop-key">Primary fit</td>
+          <td class="prop-val"><span class="n-tag forest" id="r-primary"></span></td>
+        </tr>
+        <tr>
+          <td class="prop-key">Secondary alignment</td>
+          <td class="prop-val" id="r-secondary-cell"></td>
+        </tr>
+        <tr>
+          <td class="prop-key">Roles to apply for</td>
+          <td class="prop-val"><div class="tags-wrap" id="r-roles"></div></td>
+        </tr>
+      </table>
+      <div class="result-h2">Strengths</div>
+      <ul class="bullet-list" id="r-strengths"></ul>
+      <div class="result-h2">Growth areas</div>
+      <ul class="bullet-list" id="r-growth"></ul>
+      <div class="gameplan-block" id="r-gameplan"></div>
+      <div class="ai-block" id="r-aiblock"></div>
+      <div class="result-actions">
+        <button class="btn-primary" onclick="retakeQuiz()">Retake assessment</button>
+      </div>
+    </div>
+
+  </div><!-- /page-quiz -->
+
+  <!-- ════ PAGE: ARCHETYPES INDEX ════ -->
+  <div id="page-archetypes" class="page">
+    <div class="page-rule"></div>
+    <div class="eyebrow">Reference</div>
+    <h1 class="arc-index-title">The 6 UX Archetypes</h1>
+    <p class="arc-index-intro">Every designer has a dominant mode of thinking. These six archetypes describe the distinct orientations that shape how designers approach problems, collaborate, and grow.</p>
+    <div class="arc-grid" id="arc-grid"></div>
+  </div>
+
+  <!-- ════ PAGE: ARCHETYPE DETAIL ════ -->
+  <div id="page-archetype-detail" class="page">
+    <button class="arc-back-btn" onclick="navigateTo('archetypes')">← All archetypes</button>
+    <div class="page-rule"></div>
+    <div class="eyebrow">Archetype</div>
+    <h2 class="result-title" id="arc-detail-title"></h2>
+    <p class="result-sub" id="arc-detail-sub"></p>
+    <div class="section-rule"></div>
+    <table class="props-table">
+      <tr>
+        <td class="prop-key">Archetype</td>
+        <td class="prop-val"><span class="n-tag forest" id="arc-detail-label"></span></td>
+      </tr>
+      <tr>
+        <td class="prop-key">Roles to apply for</td>
+        <td class="prop-val"><div class="tags-wrap" id="arc-detail-roles"></div></td>
+      </tr>
+    </table>
+    <div class="result-h2">Strengths</div>
+    <ul class="bullet-list" id="arc-detail-strengths"></ul>
+    <div class="result-h2">Growth areas</div>
+    <ul class="bullet-list" id="arc-detail-growth"></ul>
+    <div class="gameplan-block" id="arc-detail-gameplan"></div>
+    <div class="ai-block" id="arc-detail-aiblock"></div>
+    <div class="result-actions">
+      <button class="btn-primary" onclick="startQuiz(); navigateTo('quiz');">Take the assessment</button>
+    </div>
+  </div>
+
+</main>
+
+<script>
+/* ══════════════════════════════════
+   DATA
+══════════════════════════════════ */
+const ARCHETYPES = {
+  research:  { label: 'Research Detective' },
+  systems:   { label: 'Systems Architect' },
+  strategy:  { label: 'Product Strategist' },
+  craft:     { label: 'Craft Specialist' },
+  story:     { label: 'Storytelling Designer' },
+  synthesis: { label: 'Experience Synthesizer' },
+};
+
+const DATA = {
+  research: {
+    titleHtml: '<em>Research</em><br>Detective',
+    shortline: 'You find the answers no one else thought to ask for.',
+    description: 'You approach design as an act of discovery. Before drawing a single wireframe, you want to understand the human behind the problem: their context, their frustrations, the gap between what they say and what they do. Your instinct is to investigate, not assume.',
+    strengths: ['Uncovering root problems beneath surface requests','Synthesizing qualitative insights into clear direction','Advocating for users when the room forgets them','Designing studies and interview frameworks with rigor'],
+    growth: ['May over-rely on research before committing to a direction','Risk of analysis paralysis when data is ambiguous','Sometimes undervalues design intuition and speed'],
+    roles: ['UX Researcher','Design Researcher','Insights Researcher','Mixed Methods Researcher'],
+    career: 'Long-term, your path leads toward research leadership: owning the methodology frameworks that shape how a company learns. Senior UX Researchers grow into Research Leads, Heads of Insights, and Principal Researchers who partner with executives on strategic direction. Your greatest leverage comes from institutionalizing user knowledge so it drives product decisions at scale.',
+    gameplan: {
+      approach: [
+        'Build a portfolio of research artifacts, not just deliverables: share interview guides, synthesis frameworks, and insight reports that show your thinking process.',
+        'Start with generalist product design roles if pure research roles are scarce early on. Research is a specialism you can grow into from a broader design foundation.',
+        'Offer to run guerrilla research sessions for student projects, non-profits, or open source products to build a body of evidence before your first job.',
+      ],
+      where: [
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "UX Researcher" or "Design Researcher" + city or remote' },
+        { label: 'UXPA Job Board', url: 'https://uxpa.org/job-board/', desc: 'Specialist UX research roles globally' },
+        { label: 'Wellfound (AngelList)', url: 'https://wellfound.com/jobs', desc: 'Startup roles, often more accessible for early-career researchers' },
+        { label: 'Indeed', url: 'https://www.indeed.com/', desc: 'Filter by "entry level" + "UX Research"' },
+      ],
+      whoToReach: [
+        'Follow and engage with Principal and Senior UX Researchers on LinkedIn, many post actively about their work and hiring.',
+        'Join UXPA (User Experience Professionals Association) and attend local chapter events or webinars.',
+        'Cold message researchers whose work you have read or whose companies interest you. Reference their specific work and ask one focused question, not for a job.',
+        'Reach out to researchers at companies where you would want to work and ask for a 20-minute informational conversation about their team structure.',
+      ],
+      tools: [
+        { label: 'Maze', url: 'https://maze.design/', desc: 'Unmoderated usability testing and surveys' },
+        { label: 'Dovetail', url: 'https://dovetailapp.com/', desc: 'Research repository and synthesis' },
+        { label: 'Lookback', url: 'https://lookback.com/', desc: 'Moderated user interview sessions' },
+        { label: 'Optimal Workshop', url: 'https://www.optimalworkshop.com/', desc: 'Card sorting, tree testing, and IA research' },
+        { label: 'Notion', url: 'https://notion.so/', desc: 'Document and share research insights and frameworks' },
+      ],
+      resources: [
+        { label: 'Just Enough Research, Erika Hall', url: 'https://abookapart.com/products/just-enough-research', desc: 'Essential primer on practical UX research' },
+        { label: 'Nielsen Norman Group Articles', url: 'https://www.nngroup.com/articles/', desc: 'Free, rigorous writing on research methods' },
+        { label: 'User Interviews Blog', url: 'https://www.userinterviews.com/ux-research-field-guide', desc: 'Comprehensive UX research field guide' },
+      ],
+      ai: {
+        how: [
+          'Use AI to synthesize large volumes of interview transcripts or survey responses into themes, it handles the first pass so you can focus on interpretation and judgment.',
+          'Generate discussion guides and screener questions as a starting point, then refine them to fit the specific research context.',
+          'Use AI to stress-test your synthesis: describe your findings and ask it to identify gaps, alternative interpretations, or user segments you may have underweighted.',
+          'Automate recruitment email drafts, consent form templates, and report outlines so you spend more time on the actual research thinking.',
+        ],
+        tools: [
+          { label: 'Dovetail AI', url: 'https://dovetailapp.com/', desc: 'AI-powered research synthesis and tagging inside your repo' },
+          { label: 'Notion AI', url: 'https://notion.so/product/ai', desc: 'Summarize and reformat research notes and reports' },
+          { label: 'Otter.ai', url: 'https://otter.ai/', desc: 'Automatic transcription of user interviews' },
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Synthesis, pattern finding, and writing discussion guides' },
+          { label: 'Grain', url: 'https://grain.com/', desc: 'AI-powered interview recording, clipping, and insight extraction' },
+        ],
+      },
+    },
+  },
+  systems: {
+    titleHtml: '<em>Systems</em><br>Architect',
+    shortline: 'You see the structure others miss.',
+    description: 'You think in flows, taxonomies, and edge cases. Where others see a feature request, you see a dependency. Where others design a screen, you are already thinking about how it fits into the broader system, and how it might break. You are drawn to the invisible architecture that makes complex products feel coherent.',
+    strengths: ['Systems thinking and information architecture','Mapping flows, states, and edge cases with precision','Structuring complex products so they scale','Anticipating how design decisions propagate across a system'],
+    growth: ['May over-engineer solutions before testing simpler ones','Risk prioritizing logic over emotional experience','Can spend too long on structure at the cost of shipping'],
+    roles: ['Product Designer (Platform)','Information Architect','Design Systems Designer','Interaction Architect'],
+    career: 'Your trajectory leads toward platform design and design infrastructure. Design Systems Leads, Heads of Product Design at platform companies, and VP roles at organizations where complexity is the core product challenge. You are most valuable in organizations where coherence at scale is a strategic priority: fintech, enterprise SaaS, health tech.',
+    gameplan: {
+      approach: [
+        'Document your systems thinking: create case studies that show not just what you designed but how you mapped the structure, made decisions about hierarchy, and handled edge cases.',
+        'Contribute to or audit an open-source design system (Material Design, Radix, Atlassian Design) to show real systems work before a full-time role.',
+        'Target mid-size product companies where the design system is being built rather than inherited, you will have more ownership and visibility early.',
+      ],
+      where: [
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "Design Systems Designer" or "Information Architect"' },
+        { label: 'Dribbble Jobs', url: 'https://dribbble.com/jobs', desc: 'Strong for product and systems-focused design roles' },
+        { label: 'Wellfound', url: 'https://wellfound.com/jobs', desc: 'Startup platform roles, often with high design ownership' },
+        { label: 'Levels.fyi', url: 'https://www.levels.fyi/jobs', desc: 'Tech company design roles with compensation data' },
+      ],
+      whoToReach: [
+        'Follow Design Systems leads at companies whose products you admire, many document their systems publicly on GitHub or Storybook.',
+        'Engage in the Design Systems Slack community and Supernova community, where practitioners share work and hiring needs.',
+        'Connect with senior engineers as well as designers, systems designers who can speak engineering will stand out early in their career.',
+      ],
+      tools: [
+        { label: 'Figma', url: 'https://figma.com/', desc: 'Industry standard for component-based design systems' },
+        { label: 'Storybook', url: 'https://storybook.js.org/', desc: 'Component documentation and development environment' },
+        { label: 'Zeroheight', url: 'https://zeroheight.com/', desc: 'Design system documentation and handoff' },
+        { label: 'Supernova', url: 'https://supernova.io/', desc: 'Design system management platform' },
+        { label: 'Whimsical', url: 'https://whimsical.com/', desc: 'Flowcharts and information architecture mapping' },
+      ],
+      resources: [
+        { label: 'Design Systems, Alla Kholmatova', url: 'https://designsystemsbook.com/', desc: 'The foundational book on building design systems' },
+        { label: 'design.systems', url: 'https://design.systems/', desc: 'Community resource aggregating design system examples and writing' },
+        { label: 'Smashing Magazine, Design Systems', url: 'https://www.smashingmagazine.com/category/design-systems/', desc: 'Practical articles on systems thinking in practice' },
+      ],
+      ai: {
+        how: [
+          'Use AI to audit existing component libraries for inconsistencies: describe your token system or paste in component specs and ask it to flag naming conflicts or coverage gaps.',
+          'Generate edge case scenarios for any flow you are designing, ask it to list the states, error conditions, and user scenarios a given screen needs to handle.',
+          'Use AI to write component documentation, usage guidelines, and do/don\'t annotations at speed, freeing you to focus on the structural decisions.',
+          'Ask AI to compare your IA against known patterns in similar product categories and identify where your taxonomy may create friction.',
+        ],
+        tools: [
+          { label: 'Cursor', url: 'https://cursor.sh/', desc: 'AI code editor, useful for understanding how design tokens translate to code' },
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Edge case generation, component documentation, and IA critique' },
+          { label: 'Figma AI', url: 'https://figma.com/ai', desc: 'Auto-layout suggestions and component generation inside Figma' },
+          { label: 'Diagram (Figma plugin)', url: 'https://diagram.com/', desc: 'AI-assisted component generation and design system tooling' },
+          { label: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'Naming conventions, token naming systems, and documentation drafts' },
+        ],
+      },
+    },
+  },
+  strategy: {
+    titleHtml: '<em>Product</em><br>Strategist',
+    shortline: 'You design with the business outcome in mind.',
+    description: 'You zoom out before you zoom in. Every design decision connects to a goal: a metric, a user behavior, a business outcome. You are comfortable in the ambiguous space between product management and design, and you naturally frame problems in terms of what success looks like and how to measure it.',
+    strengths: ['Connecting design decisions to business and user outcomes','Framing problems strategically before solving them','Prioritizing ruthlessly across a product surface','Influencing roadmaps and product direction'],
+    growth: ['May move too quickly from problem to solution','Risk deprioritizing craft and polish','Sometimes underemphasizes the lived user experience'],
+    roles: ['Product Designer','Product Manager','Growth Designer','Design Lead'],
+    career: 'You are building toward senior product leadership. Your path runs through Senior Product Designer, Staff Designer, and into Head of Design or VP Product Design roles, particularly at growth-stage startups where design must drive measurable outcomes. You may also cross over into Product Management or Chief Product Officer roles as your career matures.',
+    gameplan: {
+      approach: [
+        'Frame every portfolio case study around a measurable outcome, not a deliverable. "I redesigned checkout" is weak. "Checkout redesign reduced drop-off by 18%" is the language of this role.',
+        'Get comfortable in product analytics tools early, being able to read your own data is a strong differentiator for early-career product designers.',
+        'Target growth-stage startups (Series A-C) where designers are expected to influence the roadmap, not just execute it.',
+      ],
+      where: [
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "Product Designer" at Series A/B companies' },
+        { label: 'Wellfound', url: 'https://wellfound.com/jobs', desc: 'Best startup job board with funding stage filters' },
+        { label: 'Y Combinator Work at a Startup', url: 'https://www.ycombinator.com/jobs', desc: 'YC-backed companies hiring designers' },
+        { label: 'Lenny\'s Job Board', url: 'https://www.lennysjobboard.com/', desc: 'Product and growth roles at high-quality companies' },
+      ],
+      whoToReach: [
+        'Connect with product designers and PMs at companies in industries you care about, and have a perspective on their product before you reach out.',
+        'Follow design leaders who write about strategy: Julie Zhuo, Jared Spool, and Peter Merholz publish regularly and often engage with early-career designers.',
+        'Attend product-focused design events like ProductCamp or Lenny\'s community events where cross-discipline conversations happen.',
+      ],
+      tools: [
+        { label: 'Figma', url: 'https://figma.com/', desc: 'Design and prototyping' },
+        { label: 'Mixpanel', url: 'https://mixpanel.com/', desc: 'Product analytics, learn to read your own data' },
+        { label: 'Amplitude', url: 'https://amplitude.com/', desc: 'Behavioral analytics used at most product companies' },
+        { label: 'Miro', url: 'https://miro.com/', desc: 'Strategy workshops, journey mapping, and roadmap planning' },
+        { label: 'Notion', url: 'https://notion.so/', desc: 'Product documentation and writing up strategy clearly' },
+      ],
+      resources: [
+        { label: 'The Making of a Manager, Julie Zhuo', url: 'https://www.juliezhuo.com/book/manager.html', desc: 'Essential reading on product design leadership' },
+        { label: 'Lenny\'s Newsletter', url: 'https://www.lennysnewsletter.com/', desc: 'Practical product strategy writing' },
+        { label: 'Shape Up, Basecamp', url: 'https://basecamp.com/shapeup', desc: 'Free book on how product teams scope and execute work' },
+      ],
+      ai: {
+        how: [
+          'Use AI to pressure-test your product strategy: describe a feature or direction and ask it to steelman the counterargument or identify the riskiest assumptions.',
+          'Generate competitive analysis frameworks quickly, give it a market category and ask for the key dimensions to evaluate players on, then do the actual research yourself.',
+          'Use AI to draft product briefs, opportunity statements, and success metrics as a starting scaffold, your strategic judgment shapes the final version.',
+          'Ask AI to simulate how different user personas would respond to a proposed feature or flow, surfacing edge cases and objections before you invest in design.',
+        ],
+        tools: [
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Strategic thinking partner, brief critiques, opportunity sizing, assumption testing' },
+          { label: 'Notion AI', url: 'https://notion.so/product/ai', desc: 'Product specs, opportunity briefs, and meeting summaries' },
+          { label: 'Perplexity', url: 'https://www.perplexity.ai/', desc: 'Fast competitive and market research with cited sources' },
+          { label: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'Scenario planning, user story generation, and roadmap framing' },
+          { label: 'Gamma', url: 'https://gamma.app/', desc: 'AI-generated presentations for strategy decks and stakeholder updates' },
+        ],
+      },
+    },
+  },
+  craft: {
+    titleHtml: '<em>Craft</em><br>Specialist',
+    shortline: 'The details are not details. They are the design.',
+    description: 'You believe the quality of an interaction communicates trust. The micro-animation, the spacing, the typographic hierarchy: these are not decoration, they are function. You are drawn to the refinement phase that most designers treat as the finish line, but that you treat as the beginning.',
+    strengths: ['Visual hierarchy and typographic precision','Interaction polish and micro-animation','Creating premium product feel through systematic attention','Elevating quality across an entire design surface'],
+    growth: ['May invest in polish before core problems are solved','Risk deprioritizing strategy and systems','Can struggle to move fast when craft feels incomplete'],
+    roles: ['UI Designer','Interaction Designer','Product Designer (Craft-Focused)','Visual Designer'],
+    career: 'Your long-term path runs toward Principal Design or Staff Designer titles at companies where craft is a differentiator: consumer apps, premium SaaS, design tools, and luxury-adjacent products. Some craft-focused designers transition into Creative Direction, overseeing visual language and interaction standards at a brand level.',
+    gameplan: {
+      approach: [
+        'Your portfolio is your argument. Every pixel matters. Spend more time on presentation quality than most designers think is necessary, it directly signals your standards.',
+        'Rebuild existing apps you love with better micro-interactions, then document the process and share it publicly. This is one of the fastest ways to get noticed as a craft-focused designer.',
+        'Target consumer apps, design tools, and companies known for product quality: the companies that care about craft will respond to craft-led portfolios.',
+      ],
+      where: [
+        { label: 'Dribbble Jobs', url: 'https://dribbble.com/jobs', desc: 'Best platform for craft-focused and visual design roles' },
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "UI Designer" or "Interaction Designer"' },
+        { label: 'Behance Job Board', url: 'https://www.behance.net/joblist', desc: 'Strong for visual and product design roles' },
+        { label: 'Coroflot', url: 'https://www.coroflot.com/design-jobs', desc: 'Creative and product design job listings' },
+      ],
+      whoToReach: [
+        'Follow prolific UI designers on Dribbble and Twitter/X: many share hiring news and freelance opportunities before they appear on job boards.',
+        'Engage with design communities on Figma Community, where high-craft work gets amplified and noticed by hiring designers.',
+        'Reach out to Creative Directors and Lead Designers at consumer apps you admire. Reference a specific interaction or detail that shows you actually use and study their product.',
+      ],
+      tools: [
+        { label: 'Figma', url: 'https://figma.com/', desc: 'Primary design and prototyping tool' },
+        { label: 'Principle', url: 'https://principleformac.com/', desc: 'High-fidelity interaction and animation prototyping' },
+        { label: 'Rive', url: 'https://rive.app/', desc: 'Production-ready interactive animations' },
+        { label: 'Lottie / LottieFiles', url: 'https://lottiefiles.com/', desc: 'Animation format used in production apps' },
+        { label: 'Framer', url: 'https://www.framer.com/', desc: 'High-fidelity prototyping with real interactions' },
+      ],
+      resources: [
+        { label: 'Refactoring UI', url: 'https://www.refactoringui.com/', desc: 'Practical visual design for product designers' },
+        { label: 'Sidebar.io', url: 'https://sidebar.io/', desc: 'Daily design inspiration and resources' },
+        { label: 'Mobbin', url: 'https://mobbin.com/', desc: 'Real app UI patterns and interaction references' },
+      ],
+      ai: {
+        how: [
+          'Use AI image generation to explore visual directions and moodboards quickly, not to produce final work, but to get to a reference point faster before you execute it properly.',
+          'Ask AI to critique your designs for accessibility, hierarchy, and visual consistency: describe your layout choices and ask it to identify what a senior designer would flag.',
+          'Use AI to generate copy for placeholder content in mockups that actually reflects real user language, not lorem ipsum.',
+          'Prompt AI to describe a UI interaction in plain language, then use that as the specification for prototyping, it sharpens how you articulate interaction intent.',
+        ],
+        tools: [
+          { label: 'Figma AI', url: 'https://figma.com/ai', desc: 'Auto-fill, layout suggestions, and component generation' },
+          { label: 'Midjourney', url: 'https://midjourney.com/', desc: 'Visual direction exploration and moodboarding' },
+          { label: 'Rive AI', url: 'https://rive.app/', desc: 'AI-assisted animation and interactive design' },
+          { label: 'Uizard', url: 'https://uizard.io/', desc: 'AI wireframe and mockup generation for fast concepts' },
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Microcopy, design critique, and interaction descriptions' },
+        ],
+      },
+    },
+  },
+  story: {
+    titleHtml: '<em>Storytelling</em><br>Designer',
+    shortline: 'You shape how users understand the world inside the product.',
+    description: 'You think in journeys, not screens. You understand that every interface tells a story, and that the words, the sequence, the tone, and the pacing of that story determine whether users feel confident, confused, or cared for. You are the designer who notices when the copy changes the entire meaning of a design.',
+    strengths: ['Shaping user journeys with clarity and intention','Writing microcopy and system messaging that builds trust','Crafting narrative structure through complex flows','Guiding users through uncertainty with voice and tone'],
+    growth: ['May overlook structural or systems complexity','Risk prioritizing narrative elegance over efficiency','Sometimes underestimates how much structure users need'],
+    roles: ['UX Writer','Content Designer','Conversation Designer','Content Strategist'],
+    career: 'UX Writing and Content Design are among the fastest-growing specializations in the field. Your path leads toward Content Strategy leadership: Head of Content Design, VP Content Experience, as companies realize that language is a product surface. Senior roles involve owning voice and tone frameworks, leading content systems design, and shaping how products communicate at every touchpoint.',
+    gameplan: {
+      approach: [
+        'Build a writing portfolio that shows before-and-after rewrites of real product copy: error messages, onboarding flows, empty states. This format demonstrates impact immediately.',
+        'Many UX Writers break in by starting as generalist product designers who own the content layer, frame your design work around the language decisions you made.',
+        'Specializing in a vertical (fintech, health tech, B2B SaaS) early will make you more hireable, content designers with domain expertise are rare and sought after.',
+      ],
+      where: [
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "UX Writer", "Content Designer", or "Content Strategist"' },
+        { label: 'Writer\'s Work', url: 'https://writers.work/jobs', desc: 'Writing and content roles including UX' },
+        { label: 'Content Design London Job Board', url: 'https://contentdesign.london/jobs/', desc: 'Specialist content design and UX writing roles' },
+        { label: 'Wellfound', url: 'https://wellfound.com/jobs', desc: 'Startup content and design roles' },
+      ],
+      whoToReach: [
+        'The UX writing community is small and active. Follow practitioners on LinkedIn: Torrey Podmajersky, Maggie Stanphill, and John Saito publish regularly.',
+        'Join the UX Writing Hub community and the Content Design Slack for job leads and peer feedback.',
+        'Reach out to Content Design leads directly, this is a small enough field that a thoughtful, well-written message stands out.',
+      ],
+      tools: [
+        { label: 'Figma', url: 'https://figma.com/', desc: 'Working in product files alongside designers' },
+        { label: 'Hemingway Editor', url: 'https://hemingwayapp.com/', desc: 'Clarity and readability checking' },
+        { label: 'Notion', url: 'https://notion.so/', desc: 'Content libraries, voice and tone docs, writing systems' },
+        { label: 'Contentful', url: 'https://www.contentful.com/', desc: 'CMS used at many product companies, worth understanding' },
+        { label: 'UX Writing Hub Glossary', url: 'https://uxwritinghub.com/ux-writing-glossary/', desc: 'Reference resource for UX writing terminology' },
+      ],
+      resources: [
+        { label: 'Strategic Writing for UX, Torrey Podmajersky', url: 'https://www.oreilly.com/library/view/strategic-writing-for/9781492049395/', desc: 'The definitive UX writing book' },
+        { label: 'UX Writing Hub', url: 'https://uxwritinghub.com/', desc: 'Free and paid courses, community, and job board' },
+        { label: 'Content Design, Sarah Richards', url: 'https://contentdesign.london/book/', desc: 'How content design works as a discipline' },
+      ],
+      ai: {
+        how: [
+          'Use AI as a writing partner for first drafts of microcopy, error messages, and onboarding flows, then edit heavily for voice, brand, and user context. The edit is the work.',
+          'Ask AI to rewrite the same UI string in five different tones and reading levels, then use the contrast to sharpen your own voice and tone decisions.',
+          'Use AI to audit a flow for content gaps: paste in your screen copy in sequence and ask it to identify where users might feel uncertain, confused, or lose trust.',
+          'Generate multiple headline and CTA variants quickly for A/B testing hypotheses, then validate with real users rather than relying on AI judgment about what will perform.',
+        ],
+        tools: [
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Voice and tone critique, copy variants, and content audits' },
+          { label: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'First-draft microcopy and content system documentation' },
+          { label: 'Hemingway Editor', url: 'https://hemingwayapp.com/', desc: 'Readability checking, combine with AI drafts for clarity' },
+          { label: 'Grammarly', url: 'https://grammarly.com/', desc: 'Grammar and tone consistency across a content system' },
+          { label: 'Jasper', url: 'https://jasper.ai/', desc: 'AI writing assistant tuned for brand voice and style guides' },
+        ],
+      },
+    },
+  },
+  synthesis: {
+    titleHtml: '<em>Experience</em><br>Synthesizer',
+    shortline: 'You connect the dots others do not see.',
+    description: 'You resist narrow definitions of design. You move fluidly between research and interface, strategy and craft, systems and story, not because you lack focus, but because you understand that the best design emerges at the intersections. You are drawn to problems that require connecting disciplines and translating between them.',
+    strengths: ['Cross-disciplinary thinking and synthesis','Connecting research, strategy, and execution','Adapting rapidly across different problem spaces','Strong conceptual thinking and reframing'],
+    growth: ['May lack deep specialization in early career stages','Can struggle to narrow focus when scope is open','Risk of being underestimated in highly specialized teams'],
+    roles: ['Product Designer','Service Designer','Innovation Designer','Design Strategist'],
+    career: 'Your strength becomes most valuable at senior levels, where the ability to synthesize across disciplines is rare and essential. Your path leads toward Principal Designer, Head of Design, or Design Director at companies that value breadth: consulting firms, complex service businesses, innovation labs, and companies building genuinely new categories of product.',
+    gameplan: {
+      approach: [
+        'Early in your career, breadth can read as unfocused. Frame your portfolio around a specific type of problem you solve (complex systems, new product categories, multi-stakeholder challenges) rather than a discipline.',
+        'Consulting, agency, and innovation lab roles are often better entry points than specialist in-house roles, they reward cross-disciplinary range and expose you to many problem types quickly.',
+        'Actively seek roles with ambiguous briefs and under-defined scope, these are where your synthesizing ability becomes visible and valued.',
+      ],
+      where: [
+        { label: 'LinkedIn Jobs', url: 'https://www.linkedin.com/jobs/', desc: 'Search "Service Designer", "Design Strategist", or "Innovation Designer"' },
+        { label: 'IDEO Careers', url: 'https://www.ideo.com/careers', desc: 'The canonical design consultancy for synthesis-oriented designers' },
+        { label: 'Frog Design Careers', url: 'https://www.frog.co/careers', desc: 'Global design and strategy consultancy' },
+        { label: 'Wellfound', url: 'https://wellfound.com/jobs', desc: 'Startups building new product categories' },
+        { label: 'Service Design Network Jobs', url: 'https://www.service-design-network.org/community-knowledge/jobs', desc: 'Service and experience design roles globally' },
+      ],
+      whoToReach: [
+        'Connect with Design Directors and Principal Designers at consultancies, they often hire from their own networks and respond well to thoughtful cold outreach.',
+        'Engage with the Service Design Network community and attend their annual conference or local events.',
+        'Reach out to people in innovation labs at large companies (IBM iX, Google X, IDEO) who work at the intersection of strategy and design.',
+      ],
+      tools: [
+        { label: 'Figma', url: 'https://figma.com/', desc: 'Design and systems work' },
+        { label: 'Miro', url: 'https://miro.com/', desc: 'Synthesis, service blueprinting, and strategic workshops' },
+        { label: 'Mural', url: 'https://mural.co/', desc: 'Collaborative synthesis and facilitation' },
+        { label: 'Notion', url: 'https://notion.so/', desc: 'Documenting cross-disciplinary thinking and insight frameworks' },
+        { label: 'Airtable', url: 'https://airtable.com/', desc: 'Structuring complex qualitative data and project tracking' },
+      ],
+      resources: [
+        { label: 'This is Service Design Doing', url: 'https://www.thisisservicedesigndoing.com/', desc: 'Comprehensive resource on service design methods' },
+        { label: 'IDEO Design Kit', url: 'https://www.designkit.org/', desc: 'Free human-centered design methods and tools' },
+        { label: 'Designerly Ways of Knowing, Nigel Cross', url: 'https://www.springer.com/book/9781846283000', desc: 'Foundational reading on design thinking and synthesis' },
+      ],
+      ai: {
+        how: [
+          'Use AI as a synthesis accelerator: feed it multi-source inputs (research findings, business constraints, technical limitations) and ask it to identify tensions, patterns, and reframe opportunities.',
+          'Ask AI to play devil\'s advocate against your design direction, its counterarguments often surface the assumptions you are taking for granted.',
+          'Use AI to quickly familiarize yourself with a new domain before entering it: ask it to explain the key stakeholders, constraints, and failure modes in any industry you are designing for.',
+          'Generate service blueprints and journey map scaffolds with AI, then validate and enrich them with actual stakeholder and user input, it compresses the initial framing work significantly.',
+        ],
+        tools: [
+          { label: 'Claude', url: 'https://claude.ai/', desc: 'Cross-domain synthesis, assumption testing, and strategic reframing' },
+          { label: 'Perplexity', url: 'https://www.perplexity.ai/', desc: 'Fast domain research across industries you are entering for the first time' },
+          { label: 'Miro AI', url: 'https://miro.com/ai/', desc: 'AI-assisted synthesis, clustering, and service blueprint generation' },
+          { label: 'ChatGPT', url: 'https://chatgpt.com/', desc: 'Multi-perspective scenario generation and cross-discipline framing' },
+          { label: 'Notion AI', url: 'https://notion.so/product/ai', desc: 'Summarizing complex stakeholder inputs and synthesizing research across sources' },
+        ],
+      },
+    },
+  },
+};
+
+const QUESTIONS = [
+  { text: 'When you start a new project, your instinct is to:', answers: [
+    { text: 'Talk to users and understand their actual experience before doing anything else.', a: 'research' },
+    { text: 'Map the system, flows, states, and relationships to see what already exists.', a: 'systems' },
+    { text: 'Define product goals and what success looks like in measurable terms.', a: 'strategy' },
+    { text: 'Sketch interface concepts and see what the problem feels like at screen level.', a: 'craft' },
+    { text: 'Think about the story: the journey a user takes from first contact to outcome.', a: 'story' },
+    { text: 'Gather inputs from multiple angles (business, user, technical) and look for a synthesis.', a: 'synthesis' },
+  ]},
+  { text: 'When you hit a moment of uncertainty in a project, you typically:', answers: [
+    { text: 'Go back to research: existing data or a quick study to fill the gap.', a: 'research' },
+    { text: 'Map out the problem space more formally to see where the logic breaks down.', a: 'systems' },
+    { text: 'Pressure-test assumptions against the business goal to clarify the path forward.', a: 'strategy' },
+    { text: 'Prototype several directions quickly to see which one feels right.', a: 'craft' },
+    { text: 'Reframe the question. Often the uncertainty signals a narrative problem.', a: 'story' },
+    { text: 'Look for analogous solutions from other domains or industries for inspiration.', a: 'synthesis' },
+  ]},
+  { text: 'In a design review, you tend to defend your work by:', answers: [
+    { text: 'Citing specific user research, quotes, and behavioral evidence.', a: 'research' },
+    { text: 'Walking through the system logic and how this decision fits the larger structure.', a: 'systems' },
+    { text: 'Connecting the design to the product strategy and the metric it moves.', a: 'strategy' },
+    { text: 'Demonstrating how the interaction or visual detail creates a better quality experience.', a: 'craft' },
+    { text: 'Explaining the narrative logic: why this sequence makes users feel confident.', a: 'story' },
+    { text: 'Synthesizing inputs from research, strategy, and craft into a single coherent rationale.', a: 'synthesis' },
+  ]},
+  { text: 'The part of the design process that excites you most is:', answers: [
+    { text: 'Research and discovery: sitting with users and uncovering the real problem.', a: 'research' },
+    { text: 'Information architecture: building the structure that everything else rests on.', a: 'systems' },
+    { text: 'Framing the problem and defining what a good outcome looks like.', a: 'strategy' },
+    { text: 'Refinement: the moment when spacing, hierarchy, and animation click into place.', a: 'craft' },
+    { text: 'Writing the interface: crafting copy that turns complexity into clarity.', a: 'story' },
+    { text: 'Synthesis: the moment when disparate inputs combine into a coherent concept.', a: 'synthesis' },
+  ]},
+  { text: 'When collaborating with other disciplines, you most naturally:', answers: [
+    { text: 'Partner with researchers or run your own studies to ground the team in evidence.', a: 'research' },
+    { text: 'Work closely with engineers to ensure design intent is preserved in implementation.', a: 'systems' },
+    { text: 'Collaborate with PMs and stakeholders to align on goals before designing.', a: 'strategy' },
+    { text: 'Work with other designers to push visual and interaction quality higher.', a: 'craft' },
+    { text: 'Partner with writers and brand teams to ensure the experience feels coherent.', a: 'story' },
+    { text: 'Bridge between disciplines: translating research into strategy into design.', a: 'synthesis' },
+  ]},
+  { text: 'When a project ships, you feel it was successful when:', answers: [
+    { text: 'You can point to user research that directly shaped the final decisions.', a: 'research' },
+    { text: 'The system holds together: no edge cases fell through, no flows break.', a: 'systems' },
+    { text: 'The product moved a metric or achieved a measurable business outcome.', a: 'strategy' },
+    { text: 'The experience feels polished and premium. Users notice the quality.', a: 'craft' },
+    { text: 'Users intuitively understand what to do. The language does its job.', a: 'story' },
+    { text: 'The solution brought together perspectives that none of the disciplines reached alone.', a: 'synthesis' },
+  ]},
+  { text: 'Faced with a highly ambiguous brief, your first move is to:', answers: [
+    { text: 'Get closer to users. Ambiguity usually means insufficient understanding of the problem.', a: 'research' },
+    { text: 'Create a working model: a map, a diagram, a structure to make the ambiguity visible.', a: 'systems' },
+    { text: 'Define constraints. What is the business trying to achieve and what counts as success?', a: 'strategy' },
+    { text: 'Start sketching. Working with your hands helps you discover what the problem actually is.', a: 'craft' },
+    { text: 'Write out the user story to see where the narrative is unclear or incomplete.', a: 'story' },
+    { text: 'Reframe the brief from multiple angles before committing to a single direction.', a: 'synthesis' },
+  ]},
+  { text: "When you look at a competitor's product, you instinctively notice:", answers: [
+    { text: 'Moments where the design misunderstands what users actually need.', a: 'research' },
+    { text: 'Structural inconsistencies: navigation logic, taxonomy, broken flows.', a: 'systems' },
+    { text: 'Strategic gaps: features missing that users clearly want, or misaligned priorities.', a: 'strategy' },
+    { text: 'Visual and interaction quality: typography, spacing, animation, polish.', a: 'craft' },
+    { text: 'The language and tone: how it speaks to users and whether it builds trust.', a: 'story' },
+    { text: 'The overall coherence: whether the experience feels like a unified whole or disconnected parts.', a: 'synthesis' },
+  ]},
+  { text: 'The type of feedback you find most valuable is:', answers: [
+    { text: 'Feedback from users directly: reactions, confusion, and workarounds.', a: 'research' },
+    { text: 'Technical or structural feedback: edge cases, system coherence, scalability.', a: 'systems' },
+    { text: 'Strategic feedback: whether the design serves the goal it was built to achieve.', a: 'strategy' },
+    { text: 'Craft feedback: specific observations about visual quality and interaction feel.', a: 'craft' },
+    { text: 'Language and clarity feedback: whether users understand what they need to do.', a: 'story' },
+    { text: 'Conceptual feedback: whether the overall direction is coherent and defensible.', a: 'synthesis' },
+  ]},
+  { text: 'If you had to describe your long-term ambition in design, it would be:', answers: [
+    { text: 'To build a research practice that genuinely changes how a company makes decisions.', a: 'research' },
+    { text: 'To design the underlying systems and infrastructure that make complex products work at scale.', a: 'systems' },
+    { text: 'To lead product direction at a company building something that matters.', a: 'strategy' },
+    { text: 'To raise the quality bar and make products that feel genuinely excellent to use.', a: 'craft' },
+    { text: 'To design experiences that communicate so clearly users never feel lost or confused.', a: 'story' },
+    { text: 'To work across the hardest, most complex problems, wherever discipline boundaries dissolve.', a: 'synthesis' },
+  ]},
+];
+
+/* ══════════════════════════════════
+   HAMBURGER / DRAWER
+══════════════════════════════════ */
+function toggleDrawer() {
+  const btn = document.getElementById('hamburger-btn');
+  const drawer = document.getElementById('nav-drawer');
+  const overlay = document.getElementById('drawer-overlay');
+  const open = drawer.classList.toggle('open');
+  btn.classList.toggle('open', open);
+  overlay.classList.toggle('open', open);
+}
+
+function closeDrawer() {
+  document.getElementById('hamburger-btn').classList.remove('open');
+  document.getElementById('nav-drawer').classList.remove('open');
+  document.getElementById('drawer-overlay').classList.remove('open');
+}
+
+/* ══════════════════════════════════
+   PAGE NAVIGATION
+══════════════════════════════════ */
+const PAGE_LABELS = {
+  quiz: 'Assessment',
+  archetypes: 'The archetypes',
+  'archetype-detail': 'Archetype',
+};
+
+function navigateTo(pageId, extraSetup) {
+  closeDrawer();
+
+  document.querySelectorAll('.nav-drawer-item').forEach(el => el.classList.remove('active'));
+  const navEl = document.getElementById('nav-' + pageId);
+  if (navEl) navEl.classList.add('active');
+
+  document.getElementById('header-page').textContent = PAGE_LABELS[pageId] || '';
+
+  const allPages = document.querySelectorAll('.page');
+  allPages.forEach(p => {
+    if (p.classList.contains('active')) {
+      p.classList.add('fade-out');
+      setTimeout(() => { p.classList.remove('active','fade-out'); p.style.display = 'none'; }, 280);
+    }
+  });
+
+  const target = document.getElementById('page-' + pageId);
+  setTimeout(() => {
+    if (extraSetup) extraSetup();
+    target.style.display = 'block';
+    requestAnimationFrame(() => requestAnimationFrame(() => target.classList.add('active')));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, 200);
+}
+
+/* ══════════════════════════════════
+   BUILD ARCHETYPES GRID
+══════════════════════════════════ */
+function buildArchetypesGrid() {
+  const grid = document.getElementById('arc-grid');
+  Object.entries(DATA).forEach(([id, d]) => {
+    const btn = document.createElement('button');
+    btn.className = 'arc-card';
+    btn.innerHTML = `
+      <div class="arc-card-name">${ARCHETYPES[id].label}</div>
+      <div class="arc-card-tagline">${d.shortline}</div>
+      <span class="arc-card-arrow">View archetype →</span>
+    `;
+    btn.addEventListener('click', () => openArchetypeDetail(id));
+    grid.appendChild(btn);
+  });
+}
+
+function openArchetypeDetail(id) {
+  const d = DATA[id];
+  navigateTo('archetype-detail', () => {
+    document.getElementById('arc-detail-title').innerHTML = d.titleHtml;
+    document.getElementById('arc-detail-sub').textContent = d.shortline;
+    document.getElementById('arc-detail-label').textContent = ARCHETYPES[id].label;
+    document.getElementById('arc-detail-roles').innerHTML = d.roles.map(r => `<span class="n-tag role">${r}</span>`).join('');
+    document.getElementById('arc-detail-strengths').innerHTML = d.strengths.map(s =>
+      `<li class="bullet-item"><span class="bullet-mark">—</span><span class="bullet-text">${s}</span></li>`).join('');
+    document.getElementById('arc-detail-growth').innerHTML = d.growth.map(g =>
+      `<li class="bullet-item"><span class="bullet-mark">—</span><span class="bullet-text">${g}</span></li>`).join('');
+    renderGameplan('arc-detail-gameplan', d.gameplan);
+    renderAiBlock('arc-detail-aiblock', d.gameplan.ai);
+  });
+}
+
+/* ══════════════════════════════════
+   QUIZ
+══════════════════════════════════ */
+let currentQ = 0;
+let answers = new Array(QUESTIONS.length).fill(null);
+let scores = {};
+
+function showScreen(id, delay = 0) {
+  const all = document.querySelectorAll('#page-quiz .screen');
+  const target = document.getElementById('screen-' + id);
+  all.forEach(s => {
+    if (s.classList.contains('active')) {
+      s.classList.add('fade-out');
+      setTimeout(() => { s.classList.remove('active','fade-out'); s.style.display = 'none'; }, 320);
+    }
+  });
+  setTimeout(() => {
+    target.style.display = 'block';
+    requestAnimationFrame(() => requestAnimationFrame(() => target.classList.add('active')));
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, delay + 180);
+}
+
+function startQuiz() {
+  currentQ = 0;
+  answers = new Array(QUESTIONS.length).fill(null);
+  scores = { research:0, systems:0, strategy:0, craft:0, story:0, synthesis:0 };
+  showScreen('quiz');
+  setTimeout(renderQ, 280);
+}
+
+function renderQ() {
+  const q = QUESTIONS[currentQ];
+  const num = currentQ + 1;
+  const total = QUESTIONS.length;
+  document.getElementById('progress-count').textContent = `${num} / ${total}`;
+  document.getElementById('progress-fill').style.width = `${(num / total) * 100}%`;
+  document.getElementById('q-number').textContent = 'Question ' + String(num).padStart(2, '0');
+  document.getElementById('q-text').textContent = q.text;
+  const grid = document.getElementById('answers-grid');
+  grid.innerHTML = '';
+  q.answers.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'answer-card' + (answers[currentQ] === i ? ' selected' : '');
+    btn.innerHTML = `<span class="a-radio"><span class="a-radio-dot"></span></span><span class="a-text">${a.text}</span>`;
+    btn.addEventListener('click', () => selectA(i));
+    grid.appendChild(btn);
+  });
+  const back = document.getElementById('btn-back');
+  const next = document.getElementById('btn-next');
+  back.style.opacity = currentQ > 0 ? '1' : '0';
+  back.style.pointerEvents = currentQ > 0 ? 'auto' : 'none';
+  next.textContent = currentQ === total - 1 ? 'View results' : 'Continue';
+  next.style.opacity = answers[currentQ] !== null ? '1' : '0';
+  next.style.pointerEvents = answers[currentQ] !== null ? 'auto' : 'none';
+}
+
+function selectA(idx) {
+  answers[currentQ] = idx;
+  document.querySelectorAll('.answer-card').forEach((c, i) => c.classList.toggle('selected', i === idx));
+  const next = document.getElementById('btn-next');
+  next.style.opacity = '1';
+  next.style.pointerEvents = 'auto';
+}
+
+function nextQuestion() {
+  if (answers[currentQ] === null) return;
+  if (currentQ < QUESTIONS.length - 1) {
+    fadeQ(() => { currentQ++; renderQ(); });
+  } else {
+    computeResults();
+  }
+}
+
+function prevQuestion() {
+  if (currentQ > 0) fadeQ(() => { currentQ--; renderQ(); });
+}
+
+function fadeQ(cb) {
+  const els = [document.getElementById('answers-grid'), document.getElementById('q-text')];
+  els.forEach(el => { el.style.transition='opacity 0.15s ease,transform 0.15s ease'; el.style.opacity='0'; el.style.transform='translateY(6px)'; });
+  setTimeout(() => {
+    cb();
+    requestAnimationFrame(() => { els.forEach(el => { el.style.opacity='1'; el.style.transform='translateY(0)'; }); });
+  }, 155);
+}
+
+function computeResults() {
+  scores = { research:0, systems:0, strategy:0, craft:0, story:0, synthesis:0 };
+  QUESTIONS.forEach((q, qi) => { if (answers[qi] !== null) scores[q.answers[answers[qi]].a]++; });
+  showScreen('analyzing');
+  setTimeout(() => { renderResults(); showScreen('results', 300); }, 2700);
+}
+
+function renderGameplan(containerId, gp) {
+  const el = document.getElementById(containerId);
+  const linkRow = (items) => items.map(l =>
+    `<div class="gameplan-item">
+      <span class="gameplan-mark">—</span>
+      <span class="gameplan-text">
+        <a class="gameplan-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>
+        ${l.desc ? `<span class="gameplan-link-desc">, ${l.desc}</span>` : ''}
+      </span>
+    </div>`).join('');
+  const textRow = (items) => items.map(t =>
+    `<div class="gameplan-item"><span class="gameplan-mark">—</span><span class="gameplan-text">${t}</span></div>`).join('');
+
+  el.innerHTML = `
+    <div class="gameplan-block-label">Your game plan</div>
+    <div class="gameplan-block-title">Breaking in: a path forward</div>
+    <div class="gameplan-sections">
+      <div>
+        <div class="gameplan-section-label">How to approach it</div>
+        <div class="gameplan-items">${textRow(gp.approach)}</div>
+      </div>
+      <div>
+        <div class="gameplan-section-label">Where to look for roles</div>
+        <div class="gameplan-links">${linkRow(gp.where)}</div>
+      </div>
+      <div>
+        <div class="gameplan-section-label">Who to reach out to</div>
+        <div class="gameplan-items">${textRow(gp.whoToReach)}</div>
+      </div>
+      <div>
+        <div class="gameplan-section-label">Tools to explore</div>
+        <div class="gameplan-links">${linkRow(gp.tools)}</div>
+      </div>
+      <div>
+        <div class="gameplan-section-label">Resources and reading</div>
+        <div class="gameplan-links">${linkRow(gp.resources)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderAiBlock(containerId, ai) {
+  const el = document.getElementById(containerId);
+  const linkRow = (items) => items.map(l =>
+    `<div class="gameplan-item">
+      <span class="gameplan-mark">—</span>
+      <span class="gameplan-text">
+        <a class="gameplan-link" href="${l.url}" target="_blank" rel="noopener">${l.label}</a>
+        ${l.desc ? `<span class="gameplan-link-desc">, ${l.desc}</span>` : ''}
+      </span>
+    </div>`).join('');
+  const textRow = (items) => items.map(t =>
+    `<div class="gameplan-item"><span class="gameplan-mark">—</span><span class="gameplan-text">${t}</span></div>`).join('');
+
+  el.innerHTML = `
+    <div class="gameplan-block-label">AI advantage</div>
+    <div class="gameplan-block-title">How to leverage AI for this path</div>
+    <div class="gameplan-sections">
+      <div>
+        <div class="gameplan-items">${textRow(ai.how)}</div>
+      </div>
+      <div>
+        <div class="gameplan-section-label">AI tools to explore</div>
+        <div class="gameplan-links">${linkRow(ai.tools)}</div>
+      </div>
+    </div>
+  `;
+}
+
+function renderResults() {
+  const sorted = Object.entries(scores).sort((a, b) => b[1] - a[1]);
+  const [pid] = sorted[0];
+  const [sid] = sorted[1];
+  const d = DATA[pid];
+  const hasSecondary = sorted[1][1] >= sorted[0][1] - 2;
+  document.getElementById('result-title').innerHTML = d.titleHtml;
+  document.getElementById('result-sub').textContent = d.shortline;
+  document.getElementById('r-primary').textContent = ARCHETYPES[pid].label;
+  document.getElementById('r-secondary-cell').innerHTML = hasSecondary
+    ? `<span class="n-tag green">${ARCHETYPES[sid].label}</span>`
+    : `<span class="n-tag muted">No strong secondary alignment</span>`;
+  document.getElementById('r-roles').innerHTML = d.roles.map(r => `<span class="n-tag role">${r}</span>`).join('');
+  document.getElementById('r-strengths').innerHTML = d.strengths.map(s =>
+    `<li class="bullet-item"><span class="bullet-mark">—</span><span class="bullet-text">${s}</span></li>`).join('');
+  document.getElementById('r-growth').innerHTML = d.growth.map(g =>
+    `<li class="bullet-item"><span class="bullet-mark">—</span><span class="bullet-text">${g}</span></li>`).join('');
+  renderGameplan('r-gameplan', d.gameplan);
+  renderAiBlock('r-aiblock', d.gameplan.ai);
+}
+
+function retakeQuiz() { showScreen('intro'); }
+
+/* ══════════════════════════════════
+   INIT
+══════════════════════════════════ */
+buildArchetypesGrid();
+</script>
+</body>
+</html>
